@@ -14,7 +14,6 @@
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
 			<div class="from-group">
-				<input type="hidden" id="idLengua" name="idLengua" value="<?php echo $utz_idLengua; ?> ">
 				<label for="palaba">Palabra </label>
 				<input type="text" class="from-control" id="palabra" name="palabra" placeholder="Ingrese Palabra" ><br />
 				<label for="descrip">Descripción </label>

@@ -54,6 +54,24 @@ $app->get('/nueva/:id/palabra', function($id=0) use($app, $db){
 	$app->render('nuevaPalabra.php',$data);
 });
 
+$app->post('/nueva/:id/palabra', function($id) use($app,$db){
+	$id = (int)$id;
+	$request = $app->request;
+	$palabra = $request->post('palabra');
+	$descripcion = $request->post('descrip');
+	$linkAudio = $request->post('audio');	
+
+	//insert palabras 
+	$dbquery = $db->prepare("INSERT INTO utz_palabra(utz_palabra, utz_descripcionLeng, utz_audio, 	_utz_idLengua) values (:palabra, :descrip, :audio, :id)");
+	$insertado = $dbquery->execute(array(':palabra'=>$palabra, ':descrip'=>$descripcion, ':audio'=>$linkAudio, ':id'=>$id));
+	
+	if($insertado){
+		$app->flash('message', 'Palabra Insertada Exitosamente');
+	}else{
+		$app->flash('error', 'Se produjo un error al guardar datos');		
+	}
+	$app->redirect('./palabra');
+});
 
 
 $app->run();
