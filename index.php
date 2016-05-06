@@ -24,7 +24,7 @@ $app->get('/lenguas',function() use($app, $db){
 })->name('lenguas');
 
 $app->get('/nueva/lengua',function() use($app){
-	$app->render('nueva.php');
+	$app->render('nuevaLeng.php');
 });
 
 $app->post('/nueva/lengua',function() use($app,$db){
@@ -41,6 +41,19 @@ $app->post('/nueva/lengua',function() use($app,$db){
 	}
 	$app->redirect('../lenguas');
 });
+
+$app->get('/nueva/:id/palabra', function($id=0) use($app, $db){
+	$id = (int)$id;
+	//buscamos lengua
+	$dbquery = $db->prepare("SELECT * FROM utz_lengua WHERE utz_idLengua=:id LIMIT 1");
+	$dbquery->execute(array(':id'=>$id));
+	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
+	if(!$data){
+		$app->halt(404, 'Lengua no Encontrada');
+	}
+	$app->render('nuevaPalabra.php',$data);
+});
+
 
 
 $app->run();

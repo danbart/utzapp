@@ -12,9 +12,10 @@
 			<h1>Lenguas: </h1>
 			<?php foreach ($lenguas as $key => $value):?>
 				<div class="row">
-					<div class="col-md-8"><?php echo $value['utz_lengua']; ?></div>
-					<div class="col-md-4">
+					<div class="col-md-5"><?php echo $value['utz_lengua']; ?></div>
+					<div class="col-md-7">
 						<a href="editar/<?php echo $value['utz_idLengua']?>/lengua" >Editar</a>
+						<a href="nueva/<?php echo $value['utz_idLengua']?>/palabra" >Agregar Palabra</a>
 					</div>
 				</div>
 			<?php endforeach; ?>
