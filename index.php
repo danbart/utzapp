@@ -73,5 +73,45 @@ $app->post('/nueva/:id/palabra', function($id) use($app,$db){
 	$app->redirect('./palabra');
 });
 
+$app->get('/nueva/palabraes', function() use($app){
+	$app->render('nuevaespaniol.php');
+})->name('espaniolname');
+
+//agrega nuea palabra en espaniol
+$app->post('/nueva/palabraes', function() use($app,$db){
+	$request = $app->request;
+	$palabraEs = $request->post('palabraEs');
+	$descripEs = $request->post('descripEs');
+
+	$dbquery = $db->prepare("INSERT INTO utz_spanish(utz_palabra, utz_consultado) values(:spanish, :descript)");
+	$insertado = $dbquery->execute(array(':spanish'=>$palabraEs, ':descript'=>$descripEs));
+	if($insertado){
+		$app->flash('message', 'Lengua Insertada Exitosamente');
+	}else{
+		$app->flash('error', 'Se produjo un error al guardar datos');		
+	}
+	$app->redirect('./palabraes');
+});
+
+$app->get('/espaniollengua', function() use($app,$db){
+	$dbquery = $db->prepare("SELECT * FROM utz_spanish");
+	$dbquery2 = $db->prepare("SELECT P.utz_idPalabraLeng, P.utz_palabra, L.utz_lengua FROM utz_palabra P INNER JOIN utz_lengua L ON L.utz_idLengua=P._utz_idLengua ORDER BY L.utz_idLengua DESC");
+	$dbquery->execute();
+	$dbquery2->execute();
+	$data['spanish'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+	$data['plengua'] = $dbquery2->fetchAll(PDO::FETCH_ASSOC);
+	$app->render('espalengua.php',$data);
+});
+
+$app->post('/espaniollengua', function() use($app,$db){
+	$request = $app->request;
+	$palabraEs = $request->post('espaniol');
+	$palabraleng = $request->post('lenguapal');
+
+	$dbquery = $db->prepare("INSERT INTO spanish_palabra(_utz_idPalabra, _utz_idPalabraLeng) values(:spanish, :lenguapal)");
+	$insertado = $dbquery->execute(array(':spanish'=>$palabraEs, ':lenguapal'=>$palabraleng));
+	$app->redirect('./espaniollengua');
+
+});
 
 $app->run();
