@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es_ES">
 <head>
 	<meta charset="UTF-8">
 	<title>Diccionario</title>
@@ -9,14 +9,14 @@
 </head>
 <body>
 	<div class="container">
-		<form action="" method="GET" role="form" style="margin: 0 auto;max-width: 330px;padding: 15px;" accept-charset="utf-8">
+		<form action="./serch" method="POST" role="form" style="margin: 0 auto;max-width: 330px;padding: 15px;" accept-charset="utf-8">
 			<legend>Diccionario de Lenguas Mayas</legend>
 			<?php if(isset($flash['errors'])): ?>
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
 			<div class="form-group">
 				<label for="pespa">Buscar</label>
-				<input type="text" class="form-control" id="serch" name="serch" placeholder="Ingrese Palabra en Español" >				
+				<input type="text" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra en Español" >				
 			</div>
 			<div class="form-group" style="height: 20px">
 				<?php if(isset($flash['menssage'])): ?>
@@ -36,8 +36,14 @@
 					    </tr>
 					  </thead>
 					  <tbody>
-			<?php foreach ($diccionario as $key => $value):?>
-			<?php endforeach; ?>
+						<?php foreach ($diccionario as $key => $value):?>
+						<tr>
+							<td><?php echo $value['espanol']; ?></td>
+							<td><?php echo $value['palabra']; ?></td>
+							<td><?php echo $value['lengua']; ?></td>	
+						</tr>
+					  <?php endforeach; ?>
+					</tbody>
 	</div>
 	
 </body>

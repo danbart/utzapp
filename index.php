@@ -6,8 +6,8 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-//$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
-$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
+$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
+//$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
 
 $app->get('/',function()  use($app, $db){	
@@ -15,16 +15,30 @@ $app->get('/',function()  use($app, $db){
 	$dbquery->execute();
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
 	$app->render('home.php',$data);
-})->name('home');
+});
 
-	$palabra = $palabra;
-	$dbquery = $db->prepare("SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua WHERE sp.utz_palabra LIKE'%:palabra%' OR pal.utz_palabra LIKE'%:palabra%' ORDER by sp.utz_palabra ASC");
-	$dbquery->execute();
-	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
+$app->get('/serch',function()  use($app){
+	$app->render('home.php');
+});
+
+$app->post('/serch', function() use($app, $db){
+	$request = $app->request;
+	$palabra = $request->post('palabra');
+	//$palabra = $palabra;
+	$dbquery = $db->prepare('SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengu WHERE sp.utz_palabra LIKE "%:palabra%" OR pal.utz_palabra LIKE "%:palabra%" ORDER by sp.utz_palabra ASC');
+	// 
+	//$insertado=
+	$dbquery->execute(array(':palabra'=>$palabra));
+	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+	//if($data){
+	//	$app->flash('message', 'Resultados Esperados');		
+	//}else{
+	//	$app->flash('error', 'No se encontro ninguna palabra');		
+	//}
 	if(!$data){
 		$app->halt(404, 'Palabra no Encontrada');
 	}
-	$app->render('home.php',$data);
+	$app->render('home.php', $data);
 
 });
 
