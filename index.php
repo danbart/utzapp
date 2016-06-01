@@ -6,11 +6,26 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
+//$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
+$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
 
-$app->get('/',function(){
-	echo 'Hola';
+$app->get('/',function()  use($app, $db){	
+	$dbquery = $db->prepare("SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua ORDER by sp.utz_palabra ASC");
+	$dbquery->execute();
+	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+	$app->render('home.php',$data);
+})->name('home');
+
+	$palabra = $palabra;
+	$dbquery = $db->prepare("SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua WHERE sp.utz_palabra LIKE'%:palabra%' OR pal.utz_palabra LIKE'%:palabra%' ORDER by sp.utz_palabra ASC");
+	$dbquery->execute();
+	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
+	if(!$data){
+		$app->halt(404, 'Palabra no Encontrada');
+	}
+	$app->render('home.php',$data);
+
 });
 
 $app->get('/lenguas',function() use($app, $db){
@@ -113,5 +128,7 @@ $app->post('/espaniollengua', function() use($app,$db){
 	$app->redirect('./espaniollengua');
 
 });
+
+
 
 $app->run();
