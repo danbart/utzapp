@@ -29,7 +29,7 @@
 		<h1>Diccionario: </h1>
 		<table class="table table-striped table-hover ">
 					  <thead>
-					    <tr>
+					    <tr class="active">
 					      <th>ESPAÑOL</th>
 					      <th>PALABRA</th>
 					      <th>LENGUA</th>
