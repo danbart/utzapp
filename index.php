@@ -26,7 +26,7 @@ $app->get('/serch/:bpalabra', function($bpalabra) use($app, $db){
 	//$bpalabras = "%".$request->post('palabra')."%";
 	$bpalabras1= $bpalabra;
 	$bpalabras = $bpalabra;
-	$dbquery = $db->prepare('SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengu WHERE sp.utz_palabra LIKE :esp OR pal.utz_palabra LIKE :leng ORDER by sp.utz_palabra ASC ');
+	$dbquery = $db->prepare('SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua WHERE sp.utz_palabra LIKE :esp OR pal.utz_palabra LIKE :leng ORDER by sp.utz_palabra ASC ');
 	// 
 	//$insertado=
 	//$dbquery->bindValue(':bpalabra','%{$bpalabras}%');
