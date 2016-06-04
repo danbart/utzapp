@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es_ES">
+<html lang="es-ES">
 <head>
 	<meta charset="UTF-8">
 	<title>Diccionario</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	
 </head>
 <body>
 	<div class="container">
@@ -15,8 +15,8 @@
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
 			<div class="form-group">
-				<label for="pespa">Buscar</label>
-				<input type="text" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra en Español" >				
+				<!--label for="pespa">Buscar</label>
+				<input type="text" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra en Español" -->				
 			</div>
 			<div class="form-group" style="height: 20px">
 				<?php if(isset($flash['menssage'])): ?>

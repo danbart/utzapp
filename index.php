@@ -6,8 +6,8 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
-//$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
+//$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
+$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
 
 $app->get('/',function()  use($app, $db){	
@@ -17,18 +17,21 @@ $app->get('/',function()  use($app, $db){
 	$app->render('home.php',$data);
 });
 
-$app->get('/serch',function()  use($app){
-	$app->render('home.php');
-});
+//$app->get('/serch:palabra',function($palabra)  use($app){
+//	$app->render('home.php');
+//});
 
-$app->post('/serch', function() use($app, $db){
-	$request = $app->request;
-	$palabra = $request->post('palabra');
-	//$palabra = $palabra;
-	$dbquery = $db->prepare('SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengu WHERE sp.utz_palabra LIKE "%:palabra%" OR pal.utz_palabra LIKE "%:palabra%" ORDER by sp.utz_palabra ASC');
+$app->get('/serch/:bpalabra', function($bpalabra) use($app, $db){
+	//$request = $app->request;
+	//$bpalabras = "%".$request->post('palabra')."%";
+	$bpalabras1= $bpalabra;
+	$bpalabras = $bpalabra;
+	$dbquery = $db->prepare('SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengu WHERE sp.utz_palabra LIKE :esp OR pal.utz_palabra LIKE :leng ORDER by sp.utz_palabra ASC ');
 	// 
 	//$insertado=
-	$dbquery->execute(array(':palabra'=>$palabra));
+	//$dbquery->bindValue(':bpalabra','%{$bpalabras}%');
+	//$dbquery->execute(array(':bpalabra'=>'%{$bpalabras}%',':bpalabra1'=>'%{$bpalabras}%'));
+	$dbquery->execute(array(':esp'=>'%'.$bpalabras1.'%',':leng'=>'%'.$bpalabras.'%'));
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
 	//if($data){
 	//	$app->flash('message', 'Resultados Esperados');		
@@ -123,8 +126,8 @@ $app->post('/nueva/palabraes', function() use($app,$db){
 });
 
 $app->get('/espaniollengua', function() use($app,$db){
-	$dbquery = $db->prepare("SELECT * FROM utz_spanish");
-	$dbquery2 = $db->prepare("SELECT P.utz_idPalabraLeng, P.utz_palabra, L.utz_lengua FROM utz_palabra P INNER JOIN utz_lengua L ON L.utz_idLengua=P._utz_idLengua ORDER BY L.utz_idLengua DESC");
+	$dbquery = $db->prepare("SELECT * FROM utz_spanish ORDER by utz_idPalabra DESC");
+	$dbquery2 = $db->prepare("SELECT P.utz_idPalabraLeng, P.utz_palabra, L.utz_lengua FROM utz_palabra P INNER JOIN utz_lengua L ON L.utz_idLengua=P._utz_idLengua ORDER BY P.utz_idPalabraLeng DESC");
 	$dbquery->execute();
 	$dbquery2->execute();
 	$data['spanish'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
@@ -143,6 +146,34 @@ $app->post('/espaniollengua', function() use($app,$db){
 
 });
 
+$app->get('/editar/:id/lengua', function($id=0) use($app, $db){
+	$id = (int)$id;
+	//buscamos lengua
+	$dbquery = $db->prepare("SELECT * FROM utz_lengua WHERE utz_idLengua=:id LIMIT 1");
+	$dbquery->execute(array(':id'=>$id));
+	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
+	if(!$data){
+		$app->halt(404, 'Lengua no Encontrada');
+	}
+	$app->render('editarlengua.php',$data);
+});
+
+$app->post('/editar/:id/lengua', function($id) use($app,$db){
+	$id = (int)$id;
+	$request = $app->request;
+	$lengua = $request->post('lengua');	
+
+	//insert palabras 
+	$dbquery = $db->prepare("UPDATE utz_lengua SET utz_lengua =:lengua WHERE utz_idLengua=:id");
+	$insertado = $dbquery->execute(array(':lengua'=>$lengua, ':id'=>$id));
+	
+	if($insertado){
+		$app->flash('message', 'Palabra actualizada Exitosamente');
+	}else{
+		$app->flash('error', 'Se produjo un error al actualizar datos');		
+	}
+	$app->redirect('/lenguas');
+});
 
 
 $app->run();
