@@ -38,7 +38,7 @@ $app->get('/serch/:bpalabra', function($bpalabra) use($app, $db){
 	//}else{
 	//	$app->flash('error', 'No se encontro ninguna palabra');		
 	//}
-	if(!$data){
+	if(!$data['diccionario']){
 		$app->halt(404, 'Palabra no Encontrada');
 	}
 	$app->render('home.php', $data);
