@@ -6,8 +6,8 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-//$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
-$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
+$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
+//$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
 
 $app->get('/',function()  use($app, $db){	
