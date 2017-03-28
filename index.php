@@ -17,11 +17,16 @@ $app->get('/',function()  use($app, $db){
 	$app->render('home.php',$data);
 });
 
-//$app->get('/serch:palabra',function($palabra)  use($app){
-//	$app->render('home.php');
+//$app->get('/serch/:palabra',function($palabra)  use($app){
+//	$dbquery = $db->prepare("SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua LIKE :palabra ORDER by sp.utz_palabra ASC");
+//	$palabra= "%".$palabra."%";
+//	$dbquery->bindParam("palabra", $palabra);
+//	$dbquery->execute();
+//	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+//	$app->render('home.php',$data);
 //});
 
-$app->get('/serch/:bpalabra', function($bpalabra) use($app, $db){
+$app->get('/search/:bpalabra', function($bpalabra) use($app, $db){
 	//$request = $app->request;
 	//$bpalabras = "%".$request->post('palabra')."%";
 	$bpalabras1= $bpalabra;
