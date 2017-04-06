@@ -16,8 +16,11 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
+<<<<<<< HEAD
 $db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
 
+=======
+>>>>>>> origin/master
 
 $app->notFound(function () use ($app) {
     $app->render('404.php');
