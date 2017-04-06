@@ -1,5 +1,8 @@
 
 <?php require 'header.html'; ?>
+<script >
+            document.title='Lenguas';
+    </script>
 	<div class="container">
 		<div style="margin: 0 auto;max-width: 330px;padding: 15px">	
 			<h1>Lenguas: </h1>

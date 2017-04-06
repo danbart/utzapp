@@ -17,7 +17,7 @@ $app->config(array(
 		'templates.path' => 'views',
 	));
 $db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
-//$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
+
 
 $app->notFound(function () use ($app) {
     $app->render('404.php');
@@ -103,11 +103,11 @@ $app->post('/nueva/:id/palabra', function($id) use($app,$db){
 	$request = $app->request;
 	$palabra = $request->post('palabra');
 	$descripcion = $request->post('descrip');
-	$linkAudio = $request->post('audio');	
+	//$linkAudio = $request->post('audio');	':audio'=>$linkAudio,
 
 	//insert palabras 
-	$dbquery = $db->prepare("INSERT INTO utz_palabra(utz_palabra, utz_descripcionLeng, utz_audio, 	_utz_idLengua) values (:palabra, :descrip, :audio, :id)");
-	$insertado = $dbquery->execute(array(':palabra'=>$palabra, ':descrip'=>$descripcion, ':audio'=>$linkAudio, ':id'=>$id));
+	$dbquery = $db->prepare("INSERT INTO utz_palabra(utz_palabra, utz_descripcionLeng, 	_utz_idLengua) values (:palabra, :descrip, :id)");
+	$insertado = $dbquery->execute(array(':palabra'=>$palabra, ':descrip'=>$descripcion,  ':id'=>$id));
 	
 	if($insertado){
 		$app->flash('message', 'Palabra Insertada Exitosamente');
@@ -127,7 +127,7 @@ $app->post('/nueva/palabraes', function() use($app,$db){
 	$palabraEs = $request->post('palabraEs');
 	$descripEs = $request->post('descripEs');
 
-	$dbquery = $db->prepare("INSERT INTO utz_spanish(utz_palabra, utz_consultado) values(:spanish, :descript)");
+	$dbquery = $db->prepare("INSERT INTO utz_spanish(utz_palabra, utz_descripcion, _utz_idDiccionario) values(:spanish, :descript, '1')");
 	$insertado = $dbquery->execute(array(':spanish'=>$palabraEs, ':descript'=>$descripEs));
 	if($insertado){
 		$app->flash('message', 'Lengua Insertada Exitosamente');
@@ -152,7 +152,7 @@ $app->post('/espaniollengua', function() use($app,$db){
 	$palabraEs = $request->post('espaniol');
 	$palabraleng = $request->post('lenguapal');
 
-	$dbquery = $db->prepare("INSERT INTO spanish_palabra(_utz_idPalabra, _utz_idPalabraLeng) values(:spanish, :lenguapal)");
+	$dbquery = $db->prepare("INSERT INTO utz_spanish_has_utz_palabra(_utz_idPalabra, _idPalabraLeng) values(:spanish, :lenguapal)");
 	$insertado = $dbquery->execute(array(':spanish'=>$palabraEs, ':lenguapal'=>$palabraleng));
 	$app->redirect('./espaniollengua');
 
@@ -186,6 +186,44 @@ $app->post('/editar/:id/lengua', function($id) use($app,$db){
 	}
 	$app->redirect('/lenguas');
 });
+
+$app->get('/list-spanish', function() use($app, $db) {
+	$dbquery = $db->prepare("SELECT * FROM utz_spanish ORDER by utz_idPalabra DESC");
+	$dbquery->execute();
+	$data['listspanish'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+	$app->render('list-spanish.php', $data);
+});
+
+$app->get('/editar/:id/palabraspanol', function($id=0) use($app, $db){
+	$id = (int)$id;
+	//buscamos lengua
+	$dbquery = $db->prepare("SELECT * FROM utz_spanish WHERE utz_idPalabra=:id LIMIT 1");
+	$dbquery->execute(array(':id'=>$id));
+	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
+	if(!$data){
+		$app->notFound();
+	}
+	$app->render('editpalspan.php',$data);
+});
+
+$app->post('/editar/:id/palabraspanol', function($id) use($app,$db){
+	$id = (int)$id;
+	$request = $app->request;
+	$palabraEs = $request->post('palabraEs');
+	$descripEs = $request->post('descripEs');
+
+	//insert palabras 
+	$dbquery = $db->prepare("UPDATE utz_spanish SET utz_palabra =:palabra, utz_descripcion = :descripEs WHERE utz_idPalabra=:id");
+	$insertado = $dbquery->execute(array(':palabra'=>$palabraEs, ':descripEs'=>$descripEs, ':id'=>$id));
+	
+	if($insertado){
+		$app->flash('message', 'Palabra actualizada Exitosamente');
+	}else{
+		$app->flash('error', 'Se produjo un error al actualizar datos');		
+	}
+	$app->redirect('../list-spanish');
+});
+
 
 
 $app->run();

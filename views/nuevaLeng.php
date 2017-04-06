@@ -1,5 +1,8 @@
 
 <?php require 'header.html'; ?>
+<script >
+            document.title='Nueva Lengua';
+    </script>
 	<div class="container">
 		<form action="" method="POST" role="form" style="margin: 0 auto;max-width: 330px;padding: 15px;" accept-charset="utf-8">
 			<legend>Nueva Lengua</legend>

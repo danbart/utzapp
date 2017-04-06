@@ -1,5 +1,8 @@
 
 <?php require 'header.html'; ?>
+<script >
+            document.title='Diccionario de Lenguas Mayas "UtzApp"';
+    </script>
 	<div class="container">		
 		<div style="margin: 0 auto;max-width: 330px;padding: 15px; text-align: center; ">
 			<legend>Diccionario de Lenguas Mayas <h2>"UtzApp"</h2></legend>
