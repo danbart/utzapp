@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="es_ES">
-<head>
-	<meta charset="UTF-8">
-	<title>Nueva Palabra en "<?php echo $utz_lengua; ?>" </title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-</head>
-<body>
+
+<?php require 'header.html'; ?>
 	<div class="container">
 		<form action="" method="POST" role="form" style="margin: 0 auto;max-width: 330px;padding: 15px;" accept-charset="utf-8">
 			<legend>Nueva Palabra en "<?php echo $utz_lengua; ?>" </legend>
@@ -14,12 +7,12 @@
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
 			<div class="form-group">
-				<label for="palaba">Palabra </label>
-				<input type="text" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra" ><br />
-				<label for="descrip">Descripción </label>
-				<textarea rows="4" cols="30" type="text" class="form-control" id="descrip" name="descrip" placeholder="Ingrese una breve descripción" >	</textarea> <br />
-				<label for="audio">Audio </label>
-				<input type="text" class="form-control" id="audio" name="audio" placeholder="link" >		
+				<label for="palaba">Palabra</label><span style="color:red">*</span>
+				<input type="text" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra"  required="required" ><br />
+				<label for="descrip">Descripción</label><span style="color:red">*</span>
+				<textarea rows="4" cols="30" type="text" class="form-control" id="descrip" name="descrip" placeholder="Ingrese una breve descripción"  required="required"  >	</textarea> <br />
+				<!--label for="audio">Audio </label>
+				<input type="text" class="form-control" id="audio" name="audio" placeholder="link" -->		
 			</div>
 			<div class="form-group" style="height: 20px">
 				<?php if(isset($flash['menssage'])): ?>
@@ -30,6 +23,6 @@
 		</form>
 		
 	</div>
-	
+	<span>* Campo Requerido</span>
 </body>
 </html>

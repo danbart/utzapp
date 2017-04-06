@@ -1,19 +1,12 @@
-<!DOCTYPE html>
-<html lang="es-ES">
-<head>
-	<meta charset="UTF-8">
-	<title>Diccionario</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-</head>
-<body>
+
+<?php require 'header.html'; ?>
 	<div class="container">		
-		<div style="margin: 0 auto;max-width: 330px;padding: 15px;">
-			<legend>Diccionario de Lenguas Mayas</legend>
+		<div style="margin: 0 auto;max-width: 330px;padding: 15px; text-align: center; ">
+			<legend>Diccionario de Lenguas Mayas <h2>"UtzApp"</h2></legend>
 			<?php if(isset($flash['errors'])): ?>
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
-			<div class="form-group">
+			<!--div class="form-group">
 				<label for="pespa">Buscar</label>
 				<input type="search" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra en Español" >				
 			</div><button onclick="busqueda()"  class="btn btn-primary">Buscar</button>
@@ -21,7 +14,7 @@
 				<?php if(isset($flash['menssage'])): ?>
 					<p class="text-succes"><?php echo $flash['message'] ?></p>
 				<?php endif; ?>
-			</div>			
+			</div-->			
 		</div>
 		<h1>Diccionario: </h1>
 		<table class="table table-striped table-hover ">
@@ -42,13 +35,7 @@
 					  <?php endforeach; ?>
 					</tbody>
 	</div>
-	<script >
-			function busqueda() {
-				//obtiene el valor del input y lo envia al url
-				var palabra = document.getElementById("palabra").value;				
-    		 window.location.assign("./search/"+palabra);
-		};
-	</script>
+	
 </head>
 </body>
 </html>

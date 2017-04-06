@@ -1,4 +1,14 @@
 <?php
+//Urls api
+//http://utzappumg.esy.es/
+//http://utzappumg.esy.es/lenguas
+//http://utzappumg.esy.es/serch/:palabra
+//http://utzappumg.esy.es/nueva/lengua
+//http://utzappumg.esy.es/nueva/:id/palabra
+//http://utzappumg.esy.es/nueva/palabraes
+//http://utzappumg.esy.es/espaniollengua
+//http://utzappumg.esy.es/editar/:id/lengua
+
 session_start();
 require 'vendor/autoload.php';
 $app = new \Slim\Slim();
@@ -6,32 +16,29 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-$db= new PDO('mysql:host=localhost;dbname=utzdb','root','danilosolos');
+$db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
 //$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
+$app->notFound(function () use ($app) {
+    $app->render('404.php');
+});
 
 $app->get('/',function()  use($app, $db){	
-	$dbquery = $db->prepare("SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua ORDER by sp.utz_palabra ASC");
+	$dbquery = $db->prepare('SELECT sh.utz_palabra as Español, pl.utz_palabra as Palabra, lg.utz_lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua group by lg.utz_lengua desc order by sh.utz_palabra desc');
 	$dbquery->execute();
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
 	$app->render('home.php',$data);
 });
 
-//$app->get('/serch/:palabra',function($palabra)  use($app){
-//	$dbquery = $db->prepare("SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua LIKE :palabra ORDER by sp.utz_palabra ASC");
-//	$palabra= "%".$palabra."%";
-//	$dbquery->bindParam("palabra", $palabra);
-//	$dbquery->execute();
-//	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
-//	$app->render('home.php',$data);
-//});
+
 
 $app->get('/search/:bpalabra', function($bpalabra) use($app, $db){
 	//$request = $app->request;
 	//$bpalabras = "%".$request->post('palabra')."%";
 	$bpalabras1= $bpalabra;
 	$bpalabras = $bpalabra;
-	$dbquery = $db->prepare('SELECT sp.utz_palabra as espanol, pal.utz_palabra as palabra, lg.utz_lengua as lengua FROM utz_spanish sp INNER JOIN spanish_palabra spp on sp.utz_idPalabra=spp._utz_idPalabra INNER JOIN utz_palabra pal on pal.utz_idPalabraLeng=spp._utz_idPalabraLeng INNER JOIN utz_lengua lg on pal._utz_idLengua=lg.utz_idLengua WHERE sp.utz_palabra LIKE :esp OR pal.utz_palabra LIKE :leng ORDER by sp.utz_palabra ASC ');
+	$dbquery = $db->prepare('SELECT sh.utz_palabra as Español, pl.utz_palabra as Palabra, lg.utz_lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua WHERE sh.utz_palabra LIKE :esp OR pl.utz_palabra LIKE :leng ORDER by sp.utz_palabra ASC ');
+	$error ="Palabra no Encontrada";
 	// 
 	//$insertado=
 	//$dbquery->bindValue(':bpalabra','%{$bpalabras}%');
@@ -44,7 +51,7 @@ $app->get('/search/:bpalabra', function($bpalabra) use($app, $db){
 	//	$app->flash('error', 'No se encontro ninguna palabra');		
 	//}
 	if(!$data['diccionario']){
-		$app->halt(404, 'Palabra no Encontrada');
+		$app->notFound();
 	}
 	$app->render('home.php', $data);
 
@@ -69,7 +76,7 @@ $app->post('/nueva/lengua',function() use($app,$db){
 	$lengua = $request->post('lengua');
 
 	//insertamos el dato
-	$dbquery = $db->prepare("INSERT INTO utz_lengua(utz_lengua) values(:lengua)");
+	$dbquery = $db->prepare("INSERT INTO utz_lengua(utz_lengua,_utz_idDiccionario) values(:lengua,'1')");
 	$insertado = $dbquery->execute(array(':lengua'=>$lengua));
 	if($insertado){
 		$app->flash('message', 'Lengua Insertada Exitosamente');
@@ -86,7 +93,7 @@ $app->get('/nueva/:id/palabra', function($id=0) use($app, $db){
 	$dbquery->execute(array(':id'=>$id));
 	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
 	if(!$data){
-		$app->halt(404, 'Lengua no Encontrada');
+		$app->notFound();
 	}
 	$app->render('nuevaPalabra.php',$data);
 });
@@ -158,7 +165,7 @@ $app->get('/editar/:id/lengua', function($id=0) use($app, $db){
 	$dbquery->execute(array(':id'=>$id));
 	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
 	if(!$data){
-		$app->halt(404, 'Lengua no Encontrada');
+		$app->notFound();
 	}
 	$app->render('editarlengua.php',$data);
 });

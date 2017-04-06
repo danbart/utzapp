@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="es-ES">
-<head>
-	<meta charset="UTF-8">
-	<title>Editar</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	
-</head>
-<body>
+
+<?php require 'header.html'; ?>
 	<div class="container">
 		<form action="" method="POST" role="form" style="margin: 0 auto;max-width: 330px;padding: 15px;" accept-charset="utf-8">
 			<legend>Editar Lengua</legend>
