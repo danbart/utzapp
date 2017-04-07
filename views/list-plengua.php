@@ -1,10 +1,10 @@
 <?php require 'header.html'; ?>
 <script >
-            document.title='Listado de palabras en Español';
+            document.title='Listado de palabras en Lengua';
     </script>
 	<div class="container">		
 		<div style="margin: 0 auto;max-width: 330px;padding: 15px; text-align: center; ">
-			<legend>Listado de palabras en Español</legend>
+			<legend>Listado de palabras en Lengua</legend>
 			<?php if(isset($flash['errors'])): ?>
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
@@ -14,9 +14,10 @@
 		<table class="table table-striped table-hover ">
 					  <thead>
 					    <tr class="active">
-					      <th>ID</th>
+					      <th>NO</th>
 					      <th>PALABRA</th>
 					      <th>DESCRIPCION</th>
+					      <th>LENGUA</th>
 					      <th>EDITAR</th>
 					    </tr>
 					  </thead>
@@ -24,15 +25,15 @@
 						<?php foreach ($listspanish as $key => $value):?>
 						<tr>
 							<td><?php echo $cont;?></td>
-							<td><?php echo $value['utz_palabra']; ?></td>
-							<td><?php echo $value['utz_descripcion']; ?></td>
-							<td><a href="./editar/<?php echo $value['utz_idPalabra']; ?>/palabraspanol" >editar</a></td>
+							<td><?php echo $value['palabra']; ?></td>
+							<td><?php echo $value['descripcion']; ?></td>
+							<td><?php echo $value['lengua']; ?></td>
+							<td><a href="./editar/<?php echo $value['idPalabra']; ?>/plengua" >editar</a></td>
 						</tr>
 						<?php $cont+=1;?>
 					  <?php endforeach; ?>
 					</tbody>
 	</div>
-	
-</head>
+
 </body>
 </html>

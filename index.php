@@ -16,18 +16,14 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-<<<<<<< HEAD
 $db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
-
-=======
->>>>>>> origin/master
 
 $app->notFound(function () use ($app) {
     $app->render('404.php');
 });
 
 $app->get('/',function()  use($app, $db){	
-	$dbquery = $db->prepare('SELECT sh.utz_palabra as Español, pl.utz_palabra as Palabra, lg.utz_lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua group by lg.utz_lengua desc order by sh.utz_palabra desc');
+	$dbquery = $db->prepare('SELECT sh.utz_palabra as espanol, pl.utz_palabra as palabra, lg.utz_lengua as lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua group by lg.utz_lengua desc order by sh.utz_palabra desc');
 	$dbquery->execute();
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
 	$app->render('home.php',$data);
@@ -40,8 +36,7 @@ $app->get('/search/:bpalabra', function($bpalabra) use($app, $db){
 	//$bpalabras = "%".$request->post('palabra')."%";
 	$bpalabras1= $bpalabra;
 	$bpalabras = $bpalabra;
-	$dbquery = $db->prepare('SELECT sh.utz_palabra as Español, pl.utz_palabra as Palabra, lg.utz_lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua WHERE sh.utz_palabra LIKE :esp OR pl.utz_palabra LIKE :leng ORDER by sp.utz_palabra ASC ');
-	$error ="Palabra no Encontrada";
+	$dbquery = $db->prepare('SELECT sh.utz_palabra as espanol, pl.utz_palabra as palabra, lg.utz_lengua as lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua WHERE sh.utz_palabra LIKE :esp OR pl.utz_palabra LIKE :leng ORDER by sh.utz_palabra ASC ');
 	// 
 	//$insertado=
 	//$dbquery->bindValue(':bpalabra','%{$bpalabras}%');
@@ -228,5 +223,61 @@ $app->post('/editar/:id/palabraspanol', function($id) use($app,$db){
 });
 
 
+$app->get('/list-plengua', function() use($app, $db) {
+	$dbquery = $db->prepare("SELECT pl.utz_idPalabraLeng as idPalabra, pl.utz_palabra as palabra, pl.utz_descripcionLeng as descripcion, lg.utz_idLengua as idLengua, lg.utz_lengua as lengua from utz_palabra pl inner join utz_lengua lg on pl._utz_idLengua=lg.utz_idLengua  order by pl.utz_palabra desc");
+	$dbquery->execute();
+	$data['listspanish'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+	$app->render('list-plengua.php', $data);
+});
+
+$app->get('/editar/:id/plengua', function($id=0) use($app, $db){
+	$id = (int)$id;
+	//buscamos lengua
+	$dbquery = $db->prepare("SELECT * FROM utz_palabra WHERE utz_idPalabraLeng=:id LIMIT 1");
+	$dbquery->execute(array(':id'=>$id));
+	$data = $dbquery->fetch(PDO::FETCH_ASSOC);
+	if(!$data){
+		$app->notFound();
+	}
+	$app->render('editplengua.php',$data);
+});
+
+$app->post('/editar/:id/plengua', function($id) use($app,$db){
+	$id = (int)$id;
+	$request = $app->request;
+	$palabraLeng = $request->post('palabraleng');
+	$descrip = $request->post('descrip');
+
+	//insert palabras 
+	$dbquery = $db->prepare("UPDATE utz_palabra SET utz_palabra =:palabra, utz_descripcionLeng = :descrip WHERE utz_idPalabraLeng=:id");
+	$insertado = $dbquery->execute(array(':palabra'=>$palabraLeng, ':descrip'=>$descrip, ':id'=>$id));
+	
+	if($insertado){
+		$app->flash('message', 'Palabra actualizada Exitosamente');
+	}else{
+		$app->flash('error', 'Se produjo un error al actualizar datos');		
+	}
+	$app->redirect('../list-plengua');
+});
+
+$app->get('/registro', function() use($app, $db){
+
+
+	$app->render('registro-usuario.php');
+});
+
+$app->post('/registro', function() use($app, $db){
+
+	$request = $app->request;
+	$regusuario = $request->post('regusuario');
+	$regnombre = $request->post('regnombre');
+	$regusuario = $request->post('regapellido');
+	$regnombre = $request->post('regemail');
+	$regusuario = $request->post('regpasswordconf');
+
+$dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, :regapellido, :regemail, :regpasswordconf, '1')");
+$insertado = $dbquery->execute(array(':regusuario'=>$regusuario, ':regnombre'=>$regnombre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regpasswordconf'=>$regpasswordconf));
+
+});
 
 $app->run();

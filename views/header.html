@@ -37,21 +37,35 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/Utzapp/lenguas">Lenguas <span class="sr-only">(current)</span></a></li>
-        <li><a href="/Utzapp/nueva/palabraes">Palabras</a></li>
-        <li><a href="/Utzapp/espaniollengua">Relacione Palabras</a></li>
-        <!--li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+      <!--li class="active"><a href="/Utzapp/lenguas">Lenguas <span class="sr-only">(current)</span></a></li-->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lenguas <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Lenguas</a></li>
-            <li><a href="#">Palabra</a></li>
-            <li class="divider"></li>
+            <li><a href="/Utzapp/nueva/lengua">Agregar Lengua</a></li>
+            
+            <li><a href="/Utzapp/list-plengua">Lista Palabras</a></li>
+            <!--li class="divider"></li>
             <li><a href="#">Separated link</a></li>
+            <li><a href="/Utzapp/lenguas">Lista Lenguas</a></li>
             <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
+            <li><a href="#">One more separated link</a></li-->
           </ul>
-        </li-->
+        </li>
+        
+        <!--li><a href="/Utzapp/nueva/palabraes">Palabras</a></li-->
+        <li><a href="/Utzapp/espaniollengua">Relacione Palabras</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Español <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/Utzapp/nueva/palabraes">Agregar Palabra</a></li>
+            <li><a href="/Utzapp/list-spanish">Lista Español</a></li>
+            <!--li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li><a href="./list-plengua">Lista Palabras</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li-->
+          </ul>
+        </li>
       </ul>
       <div class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -60,7 +74,8 @@
         <button onclick="busqueda()" class="btn btn-default">Buscar</button>
       </div>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Usuario</a></li>
+        <li class="active"><a href="#">Iniciar Sesión</a></li>
+        <li><a href="/Utzapp/registro">Registrarse</a></li>
       </ul>
     </div>
   </div>
