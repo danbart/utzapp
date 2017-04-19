@@ -1,4 +1,3 @@
-
 <?php require 'header.html'; ?>
 <script >
             document.title='Nueva Lengua';

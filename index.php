@@ -17,6 +17,7 @@ $app->config(array(
 		'templates.path' => 'views',
 	));
 $db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
+//$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
 $app->notFound(function () use ($app) {
     $app->render('404.php');
@@ -271,13 +272,27 @@ $app->post('/registro', function() use($app, $db){
 	$request = $app->request;
 	$regusuario = $request->post('regusuario');
 	$regnombre = $request->post('regnombre');
-	$regusuario = $request->post('regapellido');
-	$regnombre = $request->post('regemail');
-	$regusuario = $request->post('regpasswordconf');
+	$regapellido = $request->post('regapellido');
+	$regemail = $request->post('regemail');
+	$regpasswordconf = md5($request->post('regpasswordconf'));
 
 $dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, :regapellido, :regemail, :regpasswordconf, '1')");
 $insertado = $dbquery->execute(array(':regusuario'=>$regusuario, ':regnombre'=>$regnombre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regpasswordconf'=>$regpasswordconf));
 
+	$app->redirect('./registro');
 });
+
+$app->get('/inicio-sesion/', function() use($app, $db){
+
+	$app->render('sesion.php');
+
+});
+
+$app->post('/inicio-sesion/', function() use($app, $db){
+
+	$app->render('sesion.php');
+
+});
+
 
 $app->run();
