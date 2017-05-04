@@ -1,3 +1,13 @@
+<?php 
+  session_start();
+   $validar = false;
+  if(isset($_SESSION['userlog'])){
+  $validar = true;
+  } else {
+  $validar = false;
+  };
+?>
+
 <!DOCTYPE html>
 <html lang="es-ES">
 <head>
@@ -31,18 +41,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/Utzapp/">UTZAPP</a>
+      <a class="navbar-brand" href="/">UTZAPP</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
       <!--li class="active"><a href="/Utzapp/lenguas">Lenguas <span class="sr-only">(current)</span></a></li-->
+      <?php if($validar){?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lenguas <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/Utzapp/nueva/lengua">Agregar Lengua</a></li>
-            <li><a href="/Utzapp/lenguas">Lista Lenguas</a></li>
-            <li><a href="/Utzapp/list-plengua">Lista Palabras</a></li>
+            <li><a href="/nueva/lengua">Agregar Lengua</a></li>
+            <li><a href="/lenguas">Lista Lenguas</a></li>
+            <li><a href="/list-plengua">Lista Palabras</a></li>
             <!--li class="divider"></li>
             <li><a href="#">Separated link</a></li>
             
@@ -52,12 +63,12 @@
         </li>
         
         <!--li><a href="/Utzapp/nueva/palabraes">Palabras</a></li-->
-        <li><a href="/Utzapp/espaniollengua">Relacione Palabras</a></li>
+        <li><a href="/espaniollengua">Relacione Palabras</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Español <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/Utzapp/nueva/palabraes">Agregar Palabra</a></li>
-            <li><a href="/Utzapp/list-spanish">Lista Español</a></li>
+            <li><a href="/nueva/palabraes">Agregar Palabra</a></li>
+            <li><a href="/list-spanish">Lista Español</a></li>
             <!--li class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li><a href="./list-plengua">Lista Palabras</a></li>
@@ -65,6 +76,10 @@
             <li><a href="#">One more separated link</a></li-->
           </ul>
         </li>
+        <?php } else {?>
+        <li><a href="/list-plengua">Lista Palabras</a></li>
+        <li><a href="/list-spanish">Lista Español</a></li>
+        <?php }?>
       </ul>
       <div class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -73,8 +88,24 @@
         <button onclick="busqueda()" class="btn btn-default">Buscar</button>
       </div>
       <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a href="/Utzapp/inicio-sesion">Iniciar Sesión</a></li>
-        <li><a href="/Utzapp/registro">Registrarse</a></li>
+      <?php if(!$validar){?>
+        <li class="active"><a href="/inicio-sesion">Iniciar Sesión</a></li>
+        <li><a href="/registro">Registrarse</a></li>
+        <?php } else{?>
+          <li class="active"><a href="/">Sesión Iniciada <?php echo $_SESSION['userlog']; ?></a></li>
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Perfil<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/views/logout.php">Cerrar Sesion</a></li>
+            
+            <!--li class="divider"></li><li><a href="/list-spanish">Lista Español</a></li>
+            <li><a href="#">Separated link</a></li>
+            <li><a href="./list-plengua">Lista Palabras</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li-->
+          </ul>
+        </li>
+        <?php }?>
       </ul>
     </div>
   </div>
@@ -85,7 +116,7 @@
                 //obtiene el valor del input y lo envia al url
                 var palabra = document.getElementById("palabra").value; 
             if(palabra!=""){
-                 window.location.assign("/Utzapp/search/"+palabra);
+                 window.location.assign("../search/"+palabra);
             }           
             else{               
                 alert("Ingrese alguna palabra");

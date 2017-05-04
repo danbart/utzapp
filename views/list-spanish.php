@@ -17,7 +17,9 @@
 					      <th>ID</th>
 					      <th>PALABRA</th>
 					      <th>DESCRIPCION</th>
+					      <?php if($validar){?>
 					      <th>EDITAR</th>
+					      <?php }?>
 					    </tr>
 					  </thead>
 					  <tbody><?php $cont=1;?>
@@ -26,7 +28,9 @@
 							<td><?php echo $cont;?></td>
 							<td><?php echo $value['utz_palabra']; ?></td>
 							<td><?php echo $value['utz_descripcion']; ?></td>
+							<?php if($validar){?>
 							<td><a href="./editar/<?php echo $value['utz_idPalabra']; ?>/palabraspanol" >editar</a></td>
+							<?php }?>
 						</tr>
 						<?php $cont+=1;?>
 					  <?php endforeach; ?>

@@ -16,15 +16,15 @@ $app->config(array(
 		'debug' => true,
 		'templates.path' => 'views',
 	));
-$db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
-//$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
+//$db= new PDO('mysql:host=localhost;dbname=utzdb_complet','root','danilosolos');
+$db= new PDO('mysql:host=mysql.hostinger.es;dbname=u265929643_utzap','u265929643_danil','dansrodas');
 
 $app->notFound(function () use ($app) {
     $app->render('404.php');
 });
 
 $app->get('/',function()  use($app, $db){	
-	$dbquery = $db->prepare('SELECT sh.utz_palabra as espanol, pl.utz_palabra as palabra, lg.utz_lengua as lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua group by lg.utz_lengua desc order by sh.utz_palabra desc');
+	$dbquery = $db->prepare('SELECT sh.utz_palabra as espanol, pl.utz_palabra as palabra, lg.utz_lengua as lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua order by sh.utz_palabra desc');
 	$dbquery->execute();
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
 	$app->render('home.php',$data);
@@ -254,9 +254,9 @@ $app->post('/editar/:id/plengua', function($id) use($app,$db){
 	$insertado = $dbquery->execute(array(':palabra'=>$palabraLeng, ':descrip'=>$descrip, ':id'=>$id));
 	
 	if($insertado){
-		$app->flash('message', 'Palabra actualizada Exitosamente');
+		$app->flashNow('message', 'Palabra actualizada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al actualizar datos');		
+		$app->flashNow('error', 'Se produjo un error al actualizar datos');		
 	}
 	$app->redirect('../list-plengua');
 });
@@ -270,16 +270,18 @@ $app->get('/registro', function() use($app, $db){
 $app->post('/registro', function() use($app, $db){
 
 	$request = $app->request;
-	$regusuario = $request->post('regusuario');
-	$regnombre = $request->post('regnombre');
-	$regapellido = $request->post('regapellido');
-	$regemail = $request->post('regemail');
-	$regpasswordconf = md5($request->post('regpasswordconf'));
 
-$dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, :regapellido, :regemail, :regpasswordconf, '1')");
-$insertado = $dbquery->execute(array(':regusuario'=>$regusuario, ':regnombre'=>$regnombre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regpasswordconf'=>$regpasswordconf));
-
-	$app->redirect('./registro');
+				$regusuario = $request->post('regusuario');
+				$regnombre = $request->post('regnombre');
+				$regapellido = $request->post('regapellido');
+				$regemail = $request->post('regemail');
+				$regpasswordconf = md5($request->post('regpasswordconf'));
+			
+					$dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, :regapellido, :regemail, :regpasswordconf, '1')");
+					$insertado = $dbquery->execute(array(':regusuario'=>$regusuario, ':regnombre'=>$regnombre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regpasswordconf'=>$regpasswordconf));
+			
+$app->redirect('/inicio-sesion/');
+	
 });
 
 $app->get('/inicio-sesion/', function() use($app, $db){

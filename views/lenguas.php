@@ -1,5 +1,9 @@
 
-<?php require 'header.html'; ?>
+<?php require 'header.html'; 
+	if(!$validar){
+  echo "<script>window.location='/';</script>";
+  };
+?>
 <script >
             document.title='Lenguas';
     </script>

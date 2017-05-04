@@ -18,7 +18,9 @@
 					      <th>PALABRA</th>
 					      <th>DESCRIPCION</th>
 					      <th>LENGUA</th>
+					      <?php if($validar){?>
 					      <th>EDITAR</th>
+					      <?php }?>
 					    </tr>
 					  </thead>
 					  <tbody><?php $cont=1;?>
@@ -28,7 +30,9 @@
 							<td><?php echo $value['palabra']; ?></td>
 							<td><?php echo $value['descripcion']; ?></td>
 							<td><?php echo $value['lengua']; ?></td>
+							<?php if($validar){;?>
 							<td><a href="./editar/<?php echo $value['idPalabra']; ?>/plengua" >editar</a></td>
+							<?php }?>
 						</tr>
 						<?php $cont+=1;?>
 					  <?php endforeach; ?>

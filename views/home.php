@@ -9,15 +9,7 @@
 			<?php if(isset($flash['errors'])): ?>
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
-			<!--div class="form-group">
-				<label for="pespa">Buscar</label>
-				<input type="search" class="form-control" id="palabra" name="palabra" placeholder="Ingrese Palabra en Español" >				
-			</div><button onclick="busqueda()"  class="btn btn-primary">Buscar</button>
-			<div class="form-group" style="height: 20px">
-				<?php if(isset($flash['menssage'])): ?>
-					<p class="text-succes"><?php echo $flash['message'] ?></p>
-				<?php endif; ?>
-			</div-->			
+					
 		</div>
 		<h1>Diccionario: </h1>
 		<table class="table table-striped table-hover ">
@@ -39,6 +31,5 @@
 					</tbody>
 	</div>
 	
-</head>
 </body>
 </html>

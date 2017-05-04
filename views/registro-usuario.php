@@ -1,11 +1,33 @@
-<?php require 'header.html'; ?>
+<?php require 'header.html'; 
+	if($validar){
+  echo "<script>window.location='/';</script>";
+  };
+?>
 <script >
             document.title='Registro';
     </script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script type="text/javascript" language="javascript">
+		jQuery("#keycode").hide();
+		function validateform(){
+			var get_captcha_response = grecaptcha.getResponse();
+			if(get_captcha_response.length == 0)
+			{
+				// Captcha is not Passed
+				jQuery("#keycode").show();
+				return false;	
+			}
+			else
+			{
+				jQuery("#keycode").hide();
+				// Captcha is Passed
+				return true;
+			}
+		}	
+	</script>
 	<div class="container">
 	<script type="text/javascript" href="./js/regjs.js" ></script>
-		<form action="#" method="POST" id="registrous" name="registrous" role="form" style="margin: 0 auto;max-width: 490px;padding: 15px;" accept-charset="utf-8">
+		<form action="#" method="POST" id="registrous" name="registrous" role="form" style="margin: 0 auto;max-width: 490px;padding: 15px;" accept-charset="utf-8" onsubmit="return nosubmit(event)">
 			<legend>Registro</legend>
 			
 			<div class="form-group">
@@ -27,22 +49,25 @@
 				<input type="password" class="form-control" id="regpasswordconf" name="regpasswordconf" placeholder="Repita su Contraseña"  required="required" onChange="javascript:validar_clave()" >
 				<div class="label label-danger" name="alert2" id="alert2" style=" display: none;">
 				  
-				</div><br />
-				<!--button	class="g-recaptcha"	data-sitekey="6LdEkh0UAAAAAGLs0AEwID96BWIaOwBzAimZI0kD" data-callback="YourOnSubmitFn">
-						Enviar
-						</button-->	
-						<div class="g-recaptcha" data-sitekey="6Ld6hB0UAAAAAAWk_sML1k391A04BPdo5Fs-M9wP"></div>
+				</div><br /><br />
+				
+					<div class="g-recaptcha" data-sitekey="6Ld6hB0UAAAAAAWk_sML1k391A04BPdo5Fs-M9wP" style="margin-left: 17%;"></div><br />
+					<p class="label label-danger" id="keycode">Por favor comprueba que eres humano</p>
 			</div>
 			<div class="form-group" style="height: 20px">
 				<?php if(isset($flash['menssage'])): ?>
 					<p class="text-succes"><?php echo $flash['message'] ?></p>
 				<?php endif; ?>
 			</div>
-			<button type="submit"  class="btn btn-primary" onclick="return nosubmit(event)">Guardar</button>
+			<button type="submit"  class="btn btn-primary" onclick="">Guardar</button>
 		</form>
-		
+		<script type="text/javascript" language="javascript">
+		jQuery("#keycode").hide();
+	</script> 
 	</div>
 	<span>* Campo Requerido</span>
+
+
 
 <script type="text/javascript">
 	
@@ -104,10 +129,9 @@ function valid_usuario(){
 	}
 };
 
-
 function nosubmit(e){
 	e.preventDefault();
-	if(validar_clave()){
+	if(validar_clave() && validateform()){
 		//alert('funciona');
 		 document.getElementById("registrous").submit();
 	}else

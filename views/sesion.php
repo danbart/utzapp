@@ -1,20 +1,25 @@
-<?php require 'header.html'; ?>
+<?php require 'header.html';
+	if($validar){
+  echo "<script>window.location='/';</script>";
+  };
+ ?>
 <script >
             document.title='Iniciar Sesión';
     </script>
+    <script src="/js/md5.pack.js" type="text/javascript" ></script>
 	<div class="container">
 	
-		<form action="./" method="POST" id="inicioses" name="inicioses" role="form" style="margin: 0 auto;max-width: 490px;padding: 15px;" accept-charset="utf-8">
+		<form method="POST" id="inicioses" name="inicioses" role="form" style="margin: 0 auto;max-width: 490px;padding: 15px;" accept-charset="utf-8" onsubmit="return nosubmit(event)">
 			<legend>Iniciar Sesión</legend>
 			
 			<div class="form-group">
 				<label for="logusuario">Usuario</label><span style="color:red">*</span>
 				<input type="text" class="form-control" id="logusuario" name="logusuario" placeholder="Ingrese Usuario"  required="required" ><br />				
 				<label for="logpassword">Contraseña</label><span style="color:red">*</span>
-				<input type="password" class="form-control" id="logpassword" name="logpassword" placeholder="Ingrese Contraseña"  required="required" onChange="javascript:validar_clave()" >
-				<p class="label label-danger" id="alertpass1" name="alertpass1" style="display: none;"></p><br />				
-				</div><br />				
-			<button type="submit"  class="btn btn-primary" onclick="return nosubmit(event)">Guardar</button>
+				<input type="password" class="form-control" id="logpassword" name="logpassword" placeholder="Ingrese Contraseña"  required="required" ><br />				
+				</div>
+				<div id="validation"></div>	<br />			
+			<button type="submit"  class="btn btn-primary" >Iniciar</button>
 		</form>
 		
 	</div>
@@ -24,27 +29,23 @@
 	
 	function loginUtz(){
 	var $datos = document.inicioses.logusuario.value;
-	var $pass = document.inicioses.logpassword.value;
+	var $pass = md5(document.inicioses.logpassword.value);
 	if($datos!=""){
 		$.ajax({
 			type: "POST",
-			url: "./views/serchus.php",
+			url: "/views/inisesion.php",
 			data: "logusuario="+$datos+"&logpassword="+$pass,
-			dateType: "json",
+			dateType: "html",
 			beforeSend: function(){
                     //imagen de carga
-                    $("#serchusua").html("<p align='center'><img src='./img/ajax-loader.gif' /></p>");
+                    $("#validation").html("<p align='center'><img src='/img/ajax-loader.gif' /></p>");
                     },
                     error: function(){
-                    alert("error petición ajax");
+                    alert("Contraseña o usuario no encontrado");
                     },
-                    success: function(data){
-                    if(data.result==ture){
-
-                    } else {
-                    	$("#serchusua").empty();
-                    	$("#serchusua").append(data);
-                    }    
+                    success: function(response){
+                    $("#validation").empty();
+                    $("#validation").html(response);
             }
 		});
 	}
@@ -53,11 +54,11 @@
 
 function nosubmit(e){
 	e.preventDefault();
-	if(validar_clave()){
-		//alert('funciona');
-		 document.getElementById("registrous").submit();
+	if(loginUtz()){
+		alert('funciona');
+		 //document.getElementById("inicioses").submit();
 	}else
-	alert('Contraseña no valida');
+	$("#validation").html("<p align='center'><img src='/img/ajax-loader.gif' /></p>");                    
 }
 </script>
 </body>
