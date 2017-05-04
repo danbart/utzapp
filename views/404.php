@@ -14,7 +14,7 @@
   				<button type="button" class="close" data-dismiss="alert">&times;</button>
   				<strong>Oh No!</strong> Pagina no encontrada  intente con otra accion o regrese al Inicio.
 			</div>
-			  <p><a class="btn btn-primary btn-lg" href="/Utzapp/">Inicio</a></p>
+			  <p><a class="btn btn-primary btn-lg" href="/">Inicio</a></p>
 			</div>
 
 	
