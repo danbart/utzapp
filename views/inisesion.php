@@ -30,7 +30,8 @@ session_start();
             $contar = $dbquery->rowCount();
 
             if($contar != 0){
-              $_SESSION["userlog"]=$data['utz_usuario'];
+              $_SESSION["user"]["userlog"]=$data['utz_usuario'];
+              $_SESSION["user"]["useradmin"]=$data['utz_adminitrador'];
                  echo "<p class='label label-success'> Usuario '<b>".$data['utz_usuario']."</b>' Logeado. </p><br /><script > window.location='/'; </script> ";
                   return true;
             }else{

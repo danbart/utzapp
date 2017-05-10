@@ -277,7 +277,7 @@ $app->post('/registro', function() use($app, $db){
 				$regemail = $request->post('regemail');
 				$regpasswordconf = md5($request->post('regpasswordconf'));
 			
-					$dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, :regapellido, :regemail, :regpasswordconf, '1')");
+					$dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_adminitrador, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, '0', :regapellido, :regemail, :regpasswordconf, '1')");
 					$insertado = $dbquery->execute(array(':regusuario'=>$regusuario, ':regnombre'=>$regnombre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regpasswordconf'=>$regpasswordconf));
 			
 $app->redirect('/inicio-sesion/');
@@ -296,5 +296,11 @@ $app->post('/inicio-sesion/', function() use($app, $db){
 
 });
 
+$app->get('/list-usuarios', function() use($app, $db) {
+	$dbquery = $db->prepare("SELECT utz_idusuario as idusuario, utz_adminitrador as administrador, utz_usuario as usuario, utz_Nombre as nombre, utz_Apellido as apellido, utz_email as email from utz_usuario order by utz_Apellido desc");
+	$dbquery->execute();
+	$data['lisusuarios'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
+	$app->render('list-users.php', $data);
+});
 
 $app->run();

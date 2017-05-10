@@ -1,10 +1,18 @@
 <?php 
   session_start();
    $validar = false;
-  if(isset($_SESSION['userlog'])){
+   $validarAdmin = false;
+   
+  if(isset($_SESSION["user"]['userlog'])){
   $validar = true;
   } else {
   $validar = false;
+  };
+  
+  if($_SESSION["user"]["useradmin"]!=0){
+  $validarAdmin = true;
+  } else {
+  $validarAdmin = false;
   };
 ?>
 
@@ -15,8 +23,10 @@
 	<title>Diccionario</title>
 	       
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-
+  <link rel="stylesheet" type="text/css" href="/css/header.css">
+<link rel="icon" 
+      type="image/png" 
+      href="/img/Utzapp.ico">
     
 
 	<!--link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"-->
@@ -31,8 +41,10 @@
              <script src="../bower_components/respond/dest/respond.min.js"></script>
            <![endif]-->
 </head>
+
 <body>
-	<nav class="navbar navbar-default">
+	<header id="">
+  <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -41,7 +53,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">UTZAPP</a>
+      <a class="navbar-brand" href="/"> UTZAPP</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -51,7 +63,9 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lenguas <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
+           <?php if($validarAdmin){?>
             <li><a href="/nueva/lengua">Agregar Lengua</a></li>
+            <?php }?>
             <li><a href="/lenguas">Lista Lenguas</a></li>
             <li><a href="/list-plengua">Lista Palabras</a></li>
             <!--li class="divider"></li>
@@ -92,14 +106,17 @@
         <li class="active"><a href="/inicio-sesion">Iniciar Sesión</a></li>
         <li><a href="/registro">Registrarse</a></li>
         <?php } else{?>
-          <li class="active"><a href="/">Sesión Iniciada <?php echo $_SESSION['userlog']; ?></a></li>
+          <li class="active"><a href="/"><?php echo $_SESSION["user"]['userlog']; ?></a></li>
           <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Perfil<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
+            <?php if($validarAdmin){?>
+            <li><a href="/list-usuarios">Lista de Usuarios</a></li>
+            <?php }?>            
             <li><a href="/views/logout.php">Cerrar Sesion</a></li>
             
             <!--li class="divider"></li><li><a href="/list-spanish">Lista Español</a></li>
-            <li><a href="#">Separated link</a></li>
+            <li><a href="#">Separated link</a></li>  <img src="/img/Utzapp-circular.png" alt="10px 10px" >
             <li><a href="./list-plengua">Lista Palabras</a></li>
             <li class="divider"></li>
             <li><a href="#">One more separated link</a></li-->
@@ -110,13 +127,14 @@
     </div>
   </div>
 </nav>
+</header>
 
 <script >
             function busqueda() {
                 //obtiene el valor del input y lo envia al url
                 var palabra = document.getElementById("palabra").value; 
             if(palabra!=""){
-                 window.location.assign("../search/"+palabra);
+                 window.location.assign("/search/"+palabra);
             }           
             else{               
                 alert("Ingrese alguna palabra");

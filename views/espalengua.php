@@ -23,7 +23,7 @@
 				<select class="form-control" id="lenguapal" name="lenguapal"  required="required" >
 				  <option value="">seleccione</option>
 				  <?php foreach ($plengua as $key => $value):?>
-				  <option value="<?php echo $value['utz_idPalabraLeng']?>"><?php echo $value['utz_palabra']?> <?php echo $value['utz_lengua']?></option>
+				  <option value="<?php echo $value['utz_idPalabraLeng']?>"><?php echo $value['utz_palabra']?> - <?php echo $value['utz_lengua']?></option>
 				  <?php endforeach; ?>
 				</select>	
 			</div>

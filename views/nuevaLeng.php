@@ -1,5 +1,5 @@
 <?php require 'header.html'; 
-	if(!$validar){
+	if(!$validarAdmin){
   echo "<script>window.location='/';</script>";
   };
 ?>
