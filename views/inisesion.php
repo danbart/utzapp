@@ -32,6 +32,7 @@ session_start();
             if($contar != 0){
               $_SESSION["user"]["userlog"]=$data['utz_usuario'];
               $_SESSION["user"]["useradmin"]=$data['utz_adminitrador'];
+              $_SESSION["user"]["iduserlog"]=$data['utz_idusuario'];
                  echo "<p class='label label-success'> Usuario '<b>".$data['utz_usuario']."</b>' Logeado. </p><br /><script > window.location='/'; </script> ";
                   return true;
             }else{

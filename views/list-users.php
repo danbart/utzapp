@@ -4,11 +4,11 @@ if(!$validarAdmin){
   };
   ?>
 <script >
-            document.title='Listado de palabras en Lengua';
+            document.title='Listado de Usuarios';
     </script>
 	<div class="container">		
 		<div style="margin: 0 auto;max-width: 330px;padding: 15px; text-align: center; ">
-			<legend>Listado de palabras en Lengua</legend>
+			<legend>Listado de Usuarios</legend>
 			<?php if(isset($flash['errors'])): ?>
 				<p class="text-error"><?php echo $flash['errors']?></p>
 			<?php endif; ?>
@@ -33,7 +33,7 @@ if(!$validarAdmin){
 							<td><?php echo $value['usuario']; ?></td>
 							<td><?php echo $value['apellido'].' '.$value['nombre']; ?></td>
 							<td><?php echo $value['email']; ?></td>
-							<td><input type="checkbox" id="admin" checked="<?php echo $value['administrador']; ?>"></td>
+							<td><?php if($value['administrador']!=0){ echo '<span class="label label-info">Administrador</span>'; } else echo '<span class="label label-warning">Usuario</span>'; ?></td>
 							<?php if($validar){;?>
 							<td><a href="./editar/<?php echo $value['idusuario']; ?>/usuario" >editar</a></td>
 							<?php }?>

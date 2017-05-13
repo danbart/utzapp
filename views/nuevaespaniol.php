@@ -16,8 +16,8 @@
 			<div class="form-group">
 				<label for="palabaEs">Palabra</label><span style="color:red">*</span>
 				<input type="text" class="form-control" id="palabraEs" name="palabraEs" placeholder="Ingrese Palabra" required="required" ><br />
-				<label for="descripEs">Descripción </label><span style="color:red">*</span>
-				<textarea rows="4" cols="30" type="text" class="form-control" id="descripEs" name="descripEs" placeholder="Ingrese una breve descripción" required="required"></textarea>	
+				<label for="descripEs">Descripción </label>
+				<textarea rows="4" cols="30" type="text" class="form-control" id="descripEs" name="descripEs" placeholder="Ingrese una breve descripción" ></textarea>	
 			</div>
 			<div class="form-group" style="height: 20px">
 				<?php if(isset($flash['menssage'])): ?>

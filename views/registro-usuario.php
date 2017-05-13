@@ -35,7 +35,7 @@
 				<input type="text" class="form-control" id="regusuario" name="regusuario" placeholder="Ingrese Usuario"  required="required" onchange="valid_usuario()" >
 				<div  name="serchusua" id="serchusua" ></div>
 				<br />
-				<label for="regnombre">Nombre Completo</label><span style="color:red">*</span>
+				<label for="regnombre">Nombre</label><span style="color:red">*</span>
 				<input type="text" class="form-control" id="regnombre" name="regnombre" placeholder="Ingrese Nombre Completo"  required="required" ><br />
 				<label for="regapellido">Apellidos</label><span style="color:red">*</span>
 				<input type="text" class="form-control" id="regapellido" name="regapellido" placeholder="Ingrese Apellido Completo"  required="required" ><br />
