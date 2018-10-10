@@ -23,7 +23,7 @@ $app->notFound(function () use ($app) {
     $app->render('404.php');
 });
 
-$app->get('/',function()  use($app, $db){	
+$app->get('/',function()  use($app, $db){
 	$dbquery = $db->prepare('SELECT sh.utz_palabra as espanol, pl.utz_palabra as palabra, lg.utz_lengua as lengua from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua order by sh.utz_palabra asc');
 	$dbquery->execute();
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
@@ -38,16 +38,16 @@ $app->get('/search/:bpalabra', function($bpalabra) use($app, $db){
 	$bpalabras1= $bpalabra;
 	$bpalabras = $bpalabra;
 	$dbquery = $db->prepare('SELECT sh.utz_palabra as espanol, pl.utz_palabra as palabra, lg.utz_lengua as lengua, pl.utz_descripcionLeng as descripcion from utz_palabra pl inner join utz_spanish_has_utz_palabra sp on pl.utz_idPalabraLeng=sp._idPalabraLeng inner join utz_spanish sh on sp._utz_idPalabra=sh.utz_idPalabra inner join utz_lengua lg on lg.utz_idLengua=pl._utz_idLengua WHERE sh.utz_palabra LIKE :esp OR pl.utz_palabra LIKE :leng ORDER by sh.utz_palabra ASC ');
-	// 
+	//
 	//$insertado=
 	//$dbquery->bindValue(':bpalabra','%{$bpalabras}%');
 	//$dbquery->execute(array(':bpalabra'=>'%{$bpalabras}%',':bpalabra1'=>'%{$bpalabras}%'));
 	$dbquery->execute(array(':esp'=>'%'.$bpalabras1.'%',':leng'=>'%'.$bpalabras.'%'));
 	$data['diccionario'] = $dbquery->fetchAll(PDO::FETCH_ASSOC);
 	//if($data){
-	//	$app->flash('message', 'Resultados Esperados');		
+	//	$app->flash('message', 'Resultados Esperados');
 	//}else{
-	//	$app->flash('error', 'No se encontro ninguna palabra');		
+	//	$app->flash('error', 'No se encontro ninguna palabra');
 	//}
 	if(!$data['diccionario']){
 		$app->notFound();
@@ -80,7 +80,7 @@ $app->post('/nueva/lengua',function() use($app,$db){
 	if($insertado){
 		$app->flash('message', 'Lengua Insertada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al guardar datos');		
+		$app->flash('error', 'Se produjo un error al guardar datos');
 	}
 	$app->redirect('/lenguas');
 });
@@ -104,14 +104,14 @@ $app->post('/nueva/:id/palabra', function($id) use($app,$db){
 	$descripcion = $request->post('descrip');
 	//$linkAudio = $request->post('audio');	':audio'=>$linkAudio,
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("INSERT INTO utz_palabra(utz_palabra, utz_descripcionLeng, 	_utz_idLengua) values (:palabra, :descrip, :id)");
 	$insertado = $dbquery->execute(array(':palabra'=>$palabra, ':descrip'=>$descripcion,  ':id'=>$id));
-	
+
 	if($insertado){
 		$app->flash('message', 'Palabra Insertada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al guardar datos');		
+		$app->flash('error', 'Se produjo un error al guardar datos');
 	}
 	$app->redirect('./palabra');
 });
@@ -131,7 +131,7 @@ $app->post('/nueva/palabraes', function() use($app,$db){
 	if($insertado){
 		$app->flash('message', 'Lengua Insertada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al guardar datos');		
+		$app->flash('error', 'Se produjo un error al guardar datos');
 	}
 	$app->redirect('./palabraes');
 });
@@ -172,16 +172,16 @@ $app->get('/editar/:id/lengua', function($id=0) use($app, $db){
 $app->post('/editar/:id/lengua', function($id) use($app,$db){
 	$id = (int)$id;
 	$request = $app->request;
-	$lengua = $request->post('lengua');	
+	$lengua = $request->post('lengua');
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("UPDATE utz_lengua SET utz_lengua =:lengua WHERE utz_idLengua=:id");
 	$insertado = $dbquery->execute(array(':lengua'=>$lengua, ':id'=>$id));
-	
+
 	if($insertado){
 		$app->flash('message', 'Palabra actualizada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al actualizar datos');		
+		$app->flash('error', 'Se produjo un error al actualizar datos');
 	}
 	$app->redirect('/lenguas');
 });
@@ -211,14 +211,14 @@ $app->post('/editar/:id/palabraspanol', function($id) use($app,$db){
 	$palabraEs = $request->post('palabraEs');
 	$descripEs = $request->post('descripEs');
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("UPDATE utz_spanish SET utz_palabra =:palabra, utz_descripcion = :descripEs WHERE utz_idPalabra=:id");
 	$insertado = $dbquery->execute(array(':palabra'=>$palabraEs, ':descripEs'=>$descripEs, ':id'=>$id));
-	
+
 	if($insertado){
 		$app->flash('message', 'Palabra actualizada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al actualizar datos');		
+		$app->flash('error', 'Se produjo un error al actualizar datos');
 	}
 	$app->redirect('/list-spanish');
 });
@@ -249,14 +249,14 @@ $app->post('/editar/:id/plengua', function($id) use($app,$db){
 	$palabraLeng = $request->post('palabraleng');
 	$descrip = $request->post('descrip');
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("UPDATE utz_palabra SET utz_palabra =:palabra, utz_descripcionLeng = :descrip WHERE utz_idPalabraLeng=:id");
 	$insertado = $dbquery->execute(array(':palabra'=>$palabraLeng, ':descrip'=>$descrip, ':id'=>$id));
-	
+
 	if($insertado){
 		$app->flashNow('message', 'Palabra actualizada Exitosamente');
 	}else{
-		$app->flashNow('error', 'Se produjo un error al actualizar datos');		
+		$app->flashNow('error', 'Se produjo un error al actualizar datos');
 	}
 	$app->redirect('/list-plengua');
 });
@@ -276,12 +276,12 @@ $app->post('/registro', function() use($app, $db){
 				$regapellido = $request->post('regapellido');
 				$regemail = $request->post('regemail');
 				$regpasswordconf = md5($request->post('regpasswordconf'));
-			
+
 					$dbquery = $db->prepare("INSERT INTO utz_usuario (utz_usuario, utz_Nombre, utz_adminitrador, utz_Apellido, utz_email, utz_password,  _utz_idDiccionario) values (:regusuario, :regnombre, '0', :regapellido, :regemail, :regpasswordconf, '1')");
 					$insertado = $dbquery->execute(array(':regusuario'=>$regusuario, ':regnombre'=>$regnombre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regpasswordconf'=>$regpasswordconf));
-			
+
 $app->redirect('/inicio-sesion/');
-	
+
 });
 
 $app->get('/inicio-sesion/', function() use($app, $db){
@@ -323,14 +323,14 @@ $app->post('/editar/:id/usuario', function($id) use($app,$db){
 	$regemail = $request->post('regemail');
 	$regadmin = $request->post('regadmin');
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("UPDATE utz_usuario SET utz_Nombre =:renommbre, utz_Apellido = :regapellido, utz_email = :regemail, utz_adminitrador = :regadmin WHERE utz_idusuario=:id");
 	$insertado = $dbquery->execute(array(':renommbre'=>$renommbre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':regadmin'=>$regadmin, ':id'=>$id));
-	
+
 	if($insertado){
 		$app->flashNow('message', 'Palabra actualizada Exitosamente');
 	}else{
-		$app->flashNow('error', 'Se produjo un error al actualizar datos');		
+		$app->flashNow('error', 'Se produjo un error al actualizar datos');
 	}
 	$app->redirect('/list-usuarios');
 });
@@ -354,14 +354,14 @@ $app->post('/editar/:id/perfil', function($id) use($app,$db){
 	$regapellido = $request->post('regapellido');
 	$regemail = $request->post('regemail');
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("UPDATE utz_usuario SET utz_Nombre =:renommbre, utz_Apellido = :regapellido, utz_email = :regemail WHERE utz_idusuario=:id");
 	$insertado = $dbquery->execute(array(':renommbre'=>$renommbre, ':regapellido'=>$regapellido, ':regemail'=>$regemail, ':id'=>$id));
-	
+
 	if($insertado){
 		$app->flashNow('message', 'Palabra actualizada Exitosamente');
 	}else{
-		$app->flashNow('error', 'Se produjo un error al actualizar datos');		
+		$app->flashNow('error', 'Se produjo un error al actualizar datos');
 	}
 	$app->redirect('/perfil');
 });
@@ -401,14 +401,14 @@ $app->post('/comentar/:id/palabra', function($id) use($app,$db){
 	$comentleng = $request->post('comentleng');
 	//$linkAudio = $request->post('audio');	':audio'=>$linkAudio,
 
-	//insert palabras 
+	//insert palabras
 	$dbquery = $db->prepare("INSERT INTO utz_comentarios(utz_comentario, _utz_idPalabraLeng, _utz_idusuario) values (:comentleng, :id, :idusuario)");
 	$insertado = $dbquery->execute(array(':comentleng'=>$comentleng, ':id'=>$id,  ':idusuario'=>$idusuario));
-	
+
 	if($insertado){
 		$app->flash('message', 'Palabra Insertada Exitosamente');
 	}else{
-		$app->flash('error', 'Se produjo un error al guardar datos');		
+		$app->flash('error', 'Se produjo un error al guardar datos');
 	}
 	$app->redirect('/comentar/'.$id.'/palabra');
 });
